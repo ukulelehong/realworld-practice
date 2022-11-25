@@ -1,8 +1,13 @@
-import { Values } from "async-validator";
 import { instance } from "./request";
 
-export function registration(user: Values) {
-  return instance.post("/user", {
+export interface User {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export function registration(user: User) {
+  return instance.post("/users", {
     user,
   });
 }

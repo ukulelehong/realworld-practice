@@ -55,7 +55,7 @@ InternalRuleItem,
   Rules,
   Values
 } from "async-validator";
-import { registration } from "../apis/user";
+import { registration, User } from "../apis/user";
 const descriptor: Rules = {
   username: {
     type: "string",
@@ -102,7 +102,7 @@ const descriptor: Rules = {
 const validator = new Schema(descriptor);
 
 //创建响应式数据用于存储用户信息
-const userFormData = reactive<Values>({
+const userFormData = reactive<User>({
   username: "",
   email: "",
   password: "",
@@ -117,7 +117,12 @@ async function signUp(e: Event) {
   errorsMessage.splice(0,errorsMessage.length)
   try{
     const result = await validator.validate(userFormData)
-    registration(result)
+    const data = await registration(result as User)
+    if(data.status === 200){
+     return alert('注册成功！')
+    }
+    return alert('注册失败！')
+    
   }catch({errors, fields}){
     Object.keys(fields as any).forEach(key =>{
       errorsMessage.push((fields as any)[key][0].message)
