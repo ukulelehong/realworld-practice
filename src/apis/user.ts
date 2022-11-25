@@ -11,3 +11,14 @@ export function registration(user: User) {
     user,
   });
 }
+
+export interface LoginUser {
+  email: string;
+  password: string;
+}
+
+export function authentication(user: LoginUser){
+  return instance.post("/users/login", {
+    user,
+  });
+}

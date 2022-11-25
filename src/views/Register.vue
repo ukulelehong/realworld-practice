@@ -117,8 +117,8 @@ async function signUp(e: Event) {
   errorsMessage.splice(0,errorsMessage.length)
   try{
     const result = await validator.validate(userFormData)
-    const data = await registration(result as User)
-    if(data.status === 200){
+    const res = await registration(result as User)
+    if(res.status === 200){
      return alert('注册成功！')
     }
     return alert('注册失败！')
