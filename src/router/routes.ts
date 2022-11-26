@@ -43,7 +43,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
             },
             {
                 path: '/editor/article-slug-here',
-                name: 'Editor',
+                name: 'EditorWithSlug',
                 component: Editor
             },
             {
@@ -54,11 +54,12 @@ export const routes: Readonly<RouteRecordRaw[]> = [
             {
                 path: '/profile/:username',
                 name: 'Profile',
+                props: true,
                 component: Profile
             },
             {
                 path: '/profile/:username/favorites',
-                name: 'Profile',
+                name: 'ProfileFavorites',
                 component: Profile
             }
         ]

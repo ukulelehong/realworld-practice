@@ -4,11 +4,10 @@
       <div class="container">
         <div class="row">
           <div class="col-xs-12 col-md-10 offset-md-1">
-            <img src="http://i.imgur.com/Qr71crq.jpg" class="user-img" />
-            <h4>Eric Simons</h4>
+            <img :src="profile.image" class="user-img" />
+            <h4>{{profile.username}}</h4>
             <p>
-              Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda
-              looks like Peeta from the Hunger Games
+              {{profile.bio}}
             </p>
             <button class="btn btn-sm btn-outline-secondary action-btn">
               <i class="ion-plus-round"></i>
@@ -80,3 +79,32 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+import { getProfile } from "../apis/profile";
+
+const props = defineProps({
+  username: String,
+});
+
+const profile = ref<{
+  bio: null | string;
+  following: boolean;
+  image: string;
+  username: string;
+}>({
+  bio: null,
+  following: false,
+  image: '',
+  username: ''
+});
+
+if (props.username) {
+  getProfile(props.username).then((res) => {
+    if (res.status === 200) {
+      profile.value = res.data.profile;
+    }
+  });
+}
+</script>

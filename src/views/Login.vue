@@ -46,7 +46,7 @@
 import { reactive } from "vue"
 //这是表单数据校验的第三方库
 import Schema, { InternalRuleItem, Rules } from "async-validator"
-import { authentication, LoginUser } from "../apis/user"
+import { authentication, getCurrentUser, LoginUser } from "../apis/user"
 const descriptor: Rules = {
   email: {
     type: "string",
@@ -95,7 +95,11 @@ async function signIn(e: Event) {
     const result = await validator.validate(userFormData)
     try {
       const res = await authentication(result as LoginUser)
-      localStorage.setItem('token',res.data.user.token)
+      if(res.status === 200){
+        localStorage.setItem('token',res.data.user.token)
+      }
+      const currentUserRes = await getCurrentUser()
+      console.log(currentUserRes);
     } catch (err) {
       return alert("登录失败！")
     }

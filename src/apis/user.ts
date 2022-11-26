@@ -22,3 +22,8 @@ export function authentication(user: LoginUser){
     user,
   });
 }
+
+//获取当前用户
+export function getCurrentUser(){
+  return instance.get("/user");
+}
