@@ -72,15 +72,62 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { ListArticles, listArticles } from "../apis/Article"
+import { onMounted, onUnmounted, ref } from "vue";
+import { ListArticles, listArticles } from "../apis/Article";
 
-const articles = ref<ListArticles>([])
+const articles = ref<ListArticles>([]);
+const offset = ref(0);
+//设置loading防止重复加载
+const loading = ref(true);
 
-listArticles().then((data) => {
-  console.log(data.articles)
-  articles.value = data.articles
+listArticles({
+  offset: offset.value,
 })
+  .then((data) => {
+    // console.log(data.articles);
+    articles.value = data.articles;
+  })
+  .finally(() => {
+    loading.value = false;
+  });
+
+/* 理解：
+scrollTop为滚动条在Y轴上的滚动距离。
+ 
+clientHeight为内容可视区域的高度。
+ 
+scrollHeight为内容可视区域的高度加上溢出（滚动）的距离。
+ 
+从这个三个属性的介绍就可以看出来，滚动条到底部的条件即为scrollTop + clientHeight == scrollHeight。 */
+
+const onScroll = async (e: Event) => {
+  if (loading.value) {
+    return;
+  }
+  const clientHeight: number = document.documentElement.clientHeight;
+  const scrollTop: number | undefined = document.scrollingElement?.scrollTop;
+  const scrollHeight: number | undefined =
+    document.scrollingElement?.scrollHeight;
+  if (scrollTop && scrollHeight) {
+    offset.value++;
+    if (scrollHeight - 100 <= scrollTop + clientHeight) {
+      loading.value = true;
+      const data = await listArticles({
+        offset: offset.value,
+      });
+      articles.value = [...articles.value, ...data.articles];
+      
+    }
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("scroll", onScroll);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("scroll", onScroll);
+});
 </script>
 
 <style scoped>
