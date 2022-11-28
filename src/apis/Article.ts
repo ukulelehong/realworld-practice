@@ -1,9 +1,10 @@
+import { LocationQueryValue } from "vue-router";
 import { instance } from "./request";
 import { Author } from "./user";
 
 //知识点：type和interface的区别
 export type ListArticlesParams = {
-  tag?: string;
+  tag?: string|LocationQueryValue[];
   author?: string;
   favorited?: string;
   limit?: number;

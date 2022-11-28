@@ -16,11 +16,13 @@
                 <a class="nav-link disabled" href="">Your Feed</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="">Global Feed</a>
+                <router-link class="nav-link active" to="/"
+                  >Global Feed</router-link
+                >
               </li>
             </ul>
           </div>
-
+          <!-- Global Feed -->
           <div
             class="article-preview"
             v-for="(article, idx) in articles"
@@ -49,20 +51,18 @@
             </router-link>
           </div>
         </div>
-
+        <!-- Popular Tags -->
         <div class="col-md-3">
           <div class="sidebar">
             <p>Popular Tags</p>
-
             <div class="tag-list">
-              <a href="" class="tag-pill tag-default">programming</a>
-              <a href="" class="tag-pill tag-default">javascript</a>
-              <a href="" class="tag-pill tag-default">emberjs</a>
-              <a href="" class="tag-pill tag-default">angularjs</a>
-              <a href="" class="tag-pill tag-default">react</a>
-              <a href="" class="tag-pill tag-default">mean</a>
-              <a href="" class="tag-pill tag-default">node</a>
-              <a href="" class="tag-pill tag-default">rails</a>
+              <router-link
+                v-for="(tag, idx) in tags"
+                :key="idx"
+                :to="`/?tag=${tag}`"
+                class="tag-pill tag-default"
+                >{{ tag }}</router-link
+              >
             </div>
           </div>
         </div>
@@ -72,24 +72,56 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
-import { ListArticles, listArticles } from "../apis/Article";
+import { onMounted, onUnmounted, ref, watchEffect } from "vue";
+import { LocationQueryValue, useRoute, useRouter } from "vue-router";
+import {
+  ListArticles,
+  listArticles,
+  ListArticlesParams,
+} from "../apis/Article";
+import { getTags, Tags } from "../apis/tags";
 
 const articles = ref<ListArticles>([]);
+const tags = ref<Tags>([]);
+const currentTag = ref<string | LocationQueryValue[]>("");
 const offset = ref(0);
+const limit = 20;
 //设置loading防止重复加载
 const loading = ref(true);
 
-listArticles({
-  offset: offset.value,
-})
-  .then((data) => {
-    // console.log(data.articles);
-    articles.value = data.articles;
-  })
-  .finally(() => {
-    loading.value = false;
-  });
+const router = useRouter();
+
+// 存在问题，滚动时同样会调取一次
+watchEffect(async () => {
+  if (!router.currentRoute.value.query.tag) {
+    listArticles({
+      offset: offset.value,
+      limit,
+    }).then(data => {
+      articles.value = data.articles
+    }).finally(() => {
+      loading.value = false
+    })
+    return
+  }
+  currentTag.value = router.currentRoute.value.query.tag as string || '';
+  loading.value = true;
+  offset.value = 0;
+  const params: ListArticlesParams = {
+    offset: offset.value,
+    tag: currentTag.value,
+  };
+  if (params.tag === "") {
+    delete params.tag;
+  }
+  const data = await listArticles(params);
+  articles.value = data.articles;
+  loading.value = false;
+});
+
+getTags().then((data) => {
+  tags.value = data.tags;
+});
 
 /* 理解：
 scrollTop为滚动条在Y轴上的滚动距离。
@@ -109,14 +141,20 @@ const onScroll = async (e: Event) => {
   const scrollHeight: number | undefined =
     document.scrollingElement?.scrollHeight;
   if (scrollTop && scrollHeight) {
-    offset.value++;
     if (scrollHeight - 100 <= scrollTop + clientHeight) {
       loading.value = true;
-      const data = await listArticles({
+      offset.value += 1;
+      const params: ListArticlesParams = {
         offset: offset.value,
-      });
+        limit,
+        tag: currentTag.value,
+      };
+      if (params.tag === "") {
+        delete params.tag;
+      }
+      const data = await listArticles(params);
       articles.value = [...articles.value, ...data.articles];
-      
+      loading.value = false;
     }
   }
 };
@@ -131,6 +169,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* 超3行文本出现省略号 */
 .article-title {
   display: -webkit-box;
   -webkit-box-orient: vertical;
