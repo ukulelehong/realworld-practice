@@ -101,10 +101,8 @@ const profile = ref<{
 });
 
 if (props.username) {
-  getProfile(props.username).then((res) => {
-    if (res.status === 200) {
-      profile.value = res.data.profile;
-    }
+  getProfile(props.username).then((data) => {
+      profile.value = data.profile;
   });
 }
 </script>

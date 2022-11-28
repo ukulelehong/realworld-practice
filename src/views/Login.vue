@@ -94,12 +94,10 @@ async function signIn(e: Event) {
   try {
     const result = await validator.validate(userFormData)
     try {
-      const res = await authentication(result as LoginUser)
-      if(res.status === 200){
-        localStorage.setItem('token',res.data.user.token)
-      }
-      const currentUserRes = await getCurrentUser()
-      console.log(currentUserRes);
+      const data = await authentication(result as LoginUser)
+      localStorage.setItem('token',data.user.token)
+      const currentUserData = await getCurrentUser()
+      console.log(currentUserData);
     } catch (err) {
       return alert("登录失败！")
     }
