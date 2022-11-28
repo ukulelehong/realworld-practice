@@ -21,47 +21,32 @@
             </ul>
           </div>
 
-          <div class="article-preview">
+          <div
+            class="article-preview"
+            v-for="(article, idx) in articles"
+            :key="idx"
+          >
             <div class="article-meta">
-              <a href="profile.html"
-                ><img src="http://i.imgur.com/Qr71crq.jpg"
-              /></a>
+              <router-link :to="`/profile/${article.author.username}`"
+                ><img :src="article.author.image"
+              /></router-link>
               <div class="info">
-                <a href="" class="author">Eric Simons</a>
-                <span class="date">January 20th</span>
+                <router-link
+                  :to="`/profile/${article.author.username}`"
+                  class="author"
+                  >{{ article.author.username }}</router-link
+                >
+                <span class="date">{{ article.createdAt }}</span>
               </div>
               <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                <i class="ion-heart"></i> 29
+                <i class="ion-heart"></i> {{ article.favoritesCount }}
               </button>
             </div>
-            <a href="" class="preview-link">
-              <h1>How to build webapps that scale</h1>
-              <p>This is the description for the post.</p>
+            <router-link :to="`/article/${article.slug}`" class="preview-link">
+              <h1 class="article-title">{{ article.title }}</h1>
+              <p>{{ article.description }}</p>
               <span>Read more...</span>
-            </a>
-          </div>
-
-          <div class="article-preview">
-            <div class="article-meta">
-              <a href="profile.html"
-                ><img src="http://i.imgur.com/N4VcUeJ.jpg"
-              /></a>
-              <div class="info">
-                <a href="" class="author">Albert Pai</a>
-                <span class="date">January 20th</span>
-              </div>
-              <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                <i class="ion-heart"></i> 32
-              </button>
-            </div>
-            <a href="" class="preview-link">
-              <h1>
-                The song you won't ever stop singing. No matter how hard you
-                try.
-              </h1>
-              <p>This is the description for the post.</p>
-              <span>Read more...</span>
-            </a>
+            </router-link>
           </div>
         </div>
 
@@ -85,3 +70,24 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from "vue"
+import { ListArticles, listArticles } from "../apis/Article"
+
+const articles = ref<ListArticles>([])
+
+listArticles().then((data) => {
+  console.log(data.articles)
+  articles.value = data.articles
+})
+</script>
+
+<style scoped>
+.article-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+</style>

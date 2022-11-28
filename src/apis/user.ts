@@ -17,6 +17,13 @@ export interface LoginUser {
   password: string;
 }
 
+export type Author = {
+  bio: null | string;
+  following: boolean;
+  image: string;
+  username: string;
+}
+
 export function authentication(user: LoginUser){
   return instance.post("/users/login", {
     user,
@@ -25,5 +32,5 @@ export function authentication(user: LoginUser){
 
 //获取当前用户
 export function getCurrentUser(){
-  return instance.get("/user");
+  return instance.get<Author>("/user");
 }
