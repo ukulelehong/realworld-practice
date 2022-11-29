@@ -17,6 +17,10 @@ export interface LoginUser {
   password: string;
 }
 
+export type CurrentUserRes = {
+  user: Author;
+}
+
 export type Author = {
   bio: null | string;
   following: boolean;
@@ -32,5 +36,5 @@ export function authentication(user: LoginUser){
 
 //获取当前用户
 export function getCurrentUser(){
-  return instance.get<Author>("/user");
+  return instance.get<CurrentUserRes>("/user");
 }

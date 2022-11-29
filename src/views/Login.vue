@@ -96,8 +96,6 @@ async function signIn(e: Event) {
     try {
       const data = await authentication(result as LoginUser)
       localStorage.setItem('token',data.user.token)
-      const currentUserData = await getCurrentUser()
-      console.log(currentUserData);
     } catch (err) {
       return alert("登录失败！")
     }
