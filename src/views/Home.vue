@@ -91,7 +91,7 @@ const loading = ref(true);
 
 const router = useRouter();
 
-// 存在问题，滚动时同样会调取一次
+// 存在问题，滚动时同样会调取一次,应该是listArticles方法的问题，滚动事件调用该方法时改变了参数，被侦听器监听触发了侦听器
 watchEffect(async () => {
   if (!router.currentRoute.value.query.tag) {
     listArticles({

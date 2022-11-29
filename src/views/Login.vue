@@ -19,6 +19,7 @@
                 class="form-control form-control-lg"
                 type="text"
                 placeholder="Email"
+                :disabled = "logging"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -27,11 +28,13 @@
                 class="form-control form-control-lg"
                 type="password"
                 placeholder="Password"
+                :disabled = "logging"
               />
             </fieldset>
             <button
               class="btn btn-lg btn-primary pull-xs-right"
               @click="signIn"
+              :disabled = "logging"
             >
               Sign In
             </button>
@@ -43,10 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue"
+import { reactive, ref } from "vue"
 //这是表单数据校验的第三方库
 import Schema, { InternalRuleItem, Rules } from "async-validator"
 import { authentication, getCurrentUser, LoginUser } from "../apis/user"
+import { useRouter } from "vue-router";
 const descriptor: Rules = {
   email: {
     type: "string",
@@ -85,6 +89,9 @@ const userFormData = reactive<LoginUser>({
   password: ""
 })
 
+const logging = ref<boolean>(false)
+const router = useRouter()
+
 // 收集错误提示信息
 const errorsMessage = reactive<string[]>([])
 
@@ -94,10 +101,14 @@ async function signIn(e: Event) {
   try {
     const result = await validator.validate(userFormData)
     try {
+      logging.value = true
       const data = await authentication(result as LoginUser)
       localStorage.setItem('token',data.user.token)
+      router.push('/')
     } catch (err) {
       return alert("登录失败！")
+    }finally{
+      logging.value = false
     }
   } catch ({ errors, fields }) {
     Object.keys(fields as any).forEach((key) => {
