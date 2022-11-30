@@ -51,6 +51,7 @@ import { reactive, ref } from "vue"
 import Schema, { InternalRuleItem, Rules } from "async-validator"
 import { authentication, getCurrentUser, LoginUser } from "../apis/user"
 import { useRouter } from "vue-router";
+import { useUserStore } from "../stores/user";
 const descriptor: Rules = {
   email: {
     type: "string",
@@ -91,6 +92,7 @@ const userFormData = reactive<LoginUser>({
 
 const logging = ref<boolean>(false)
 const router = useRouter()
+const userStore  = useUserStore()
 
 // 收集错误提示信息
 const errorsMessage = reactive<string[]>([])
@@ -104,6 +106,7 @@ async function signIn(e: Event) {
       logging.value = true
       const data = await authentication(result as LoginUser)
       localStorage.setItem('token',data.user.token)
+      userStore.login()
       router.push('/')
     } catch (err) {
       return alert("登录失败！")

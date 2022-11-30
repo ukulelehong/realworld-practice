@@ -7,7 +7,7 @@
           <!-- Add "active" class when you're on that page" -->
           <router-link class="nav-link active" to="/">Home</router-link>
         </li>
-        <template v-if="isLogin">
+        <template v-if="userStore.isLogin">
           <li class="nav-item">
             <router-link class="nav-link" to="/article/article-slug-here">
               <i class="ion-compose"></i>&nbsp;New Article
@@ -25,7 +25,7 @@
         <li class="nav-item">
           <router-link class="nav-link" to="/register">Sign up</router-link>
         </li>
-        <li class="nav-item avatar" v-if="isLogin">
+        <li class="nav-item avatar" v-if="userStore.isLogin">
           <router-link class="nav-link" to=""
             ><img :src="user?.image" class="user-pic" alt="user-img" />&nbsp;{{
               user?.username
@@ -45,15 +45,23 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { Author, getCurrentUser } from "../../apis/user"
+import { useUserStore } from "../../stores/user";
+
+const userStore = useUserStore()
+
 
 const user = ref<Author>()
-const isLogin = ref<boolean>(!!localStorage.getItem("token"))
 
-if (isLogin.value) {
+
+
+
+if (userStore.isLogin) {
   getCurrentUser().then((res) => {
     user.value = res.user
   })
 }
+
+
 
 const signOut = ()=>{
   localStorage.removeItem('token')
