@@ -27,13 +27,13 @@
         </li>
         <li class="nav-item avatar" v-if="userStore.isLogin">
           <router-link class="nav-link" to=""
-            ><img :src="user?.image" class="user-pic" alt="user-img" />&nbsp;{{
-              user?.username
+            ><img :src="userStore.user?.image" class="user-pic" alt="user-img" />&nbsp;{{
+              userStore.user?.username
             }}</router-link
           >
           <div class="menu">
             <ul>
-              <li @click="signOut">退出登录</li>
+              <li @click="userStore.signOut">退出登录</li>
             </ul>
           </div>
         </li>
@@ -43,29 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { Author, getCurrentUser } from "../../apis/user"
 import { useUserStore } from "../../stores/user";
-
 const userStore = useUserStore()
-
-
-const user = ref<Author>()
-
-
-
-
-if (userStore.isLogin) {
-  getCurrentUser().then((res) => {
-    user.value = res.user
-  })
-}
-
-
-
-const signOut = ()=>{
-  localStorage.removeItem('token')
-}
 </script>
 
 <style scoped>
