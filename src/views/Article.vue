@@ -5,7 +5,7 @@
         <h1>How to build webapps that scale</h1>
 
         <div class="article-meta">
-          <a href=""><img src="https://p3-passport.byteimg.com/img/mosaic-legacy/3791/5035712059~100x100.awebp" /></a>
+          <router-link to=""><img :src="articleStore.article.author.username" /></router-link>
           <div class="info">
             <a href="" class="author">Eric Simons</a>
             <span class="date">January 20th</span>
@@ -135,7 +135,6 @@ const props = defineProps({
 });
 const articleStore = useArticleStore()
 if(props.slug){
-  console.log(props.slug)
   articleStore.getCurrentArticle(props.slug)
 }
 </script>

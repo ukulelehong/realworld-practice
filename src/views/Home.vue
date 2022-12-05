@@ -78,7 +78,7 @@ import {
   ListArticles,
   listArticles,
   ListArticlesParams,
-} from "../apis/Article";
+} from "../apis/article";
 import { getTags, Tags } from "../apis/tags";
 
 const articles = ref<ListArticles>([]);
