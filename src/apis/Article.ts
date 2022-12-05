@@ -30,11 +30,16 @@ export type ListArticles = {
 }[]
 
 
-
+//获取文章列表
 export function listArticles(params: ListArticlesParams = {}) {
   return instance.get<ListArticlesRes>(`/articles`,{
     params,
   });
+}
+
+//获取文章详情
+export function getArticle(slug: string) {
+  return instance.get(`/articles/${slug}`);
 }
 
 

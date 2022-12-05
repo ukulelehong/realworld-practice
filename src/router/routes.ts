@@ -47,8 +47,9 @@ export const routes: Readonly<RouteRecordRaw[]> = [
                 component: Editor
             },
             {
-                path: '/article/:articleSlugHere',
+                path: '/article/:slug',
                 name: 'Article',
+                props: true,
                 component: Article
             },
             {

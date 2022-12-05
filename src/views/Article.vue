@@ -5,7 +5,7 @@
         <h1>How to build webapps that scale</h1>
 
         <div class="article-meta">
-          <a href=""><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
+          <a href=""><img src="https://p3-passport.byteimg.com/img/mosaic-legacy/3791/5035712059~100x100.awebp" /></a>
           <div class="info">
             <a href="" class="author">Eric Simons</a>
             <span class="date">January 20th</span>
@@ -40,7 +40,7 @@
       <div class="article-actions">
         <div class="article-meta">
           <a href="profile.html"
-            ><img src="http://i.imgur.com/Qr71crq.jpg"
+            ><img src="https://p3-passport.byteimg.com/img/mosaic-legacy/3791/5035712059~100x100.awebp"
           /></a>
           <div class="info">
             <a href="" class="author">Eric Simons</a>
@@ -71,7 +71,7 @@
             </div>
             <div class="card-footer">
               <img
-                src="http://i.imgur.com/Qr71crq.jpg"
+                src="https://p3-passport.byteimg.com/img/mosaic-legacy/3791/5035712059~100x100.awebp"
                 class="comment-author-img"
               />
               <button class="btn btn-sm btn-primary">Post Comment</button>
@@ -88,7 +88,7 @@
             <div class="card-footer">
               <a href="" class="comment-author">
                 <img
-                  src="http://i.imgur.com/Qr71crq.jpg"
+                  src="https://p3-passport.byteimg.com/img/mosaic-legacy/3791/5035712059~100x100.awebp"
                   class="comment-author-img"
                 />
               </a>
@@ -108,7 +108,7 @@
             <div class="card-footer">
               <a href="" class="comment-author">
                 <img
-                  src="http://i.imgur.com/Qr71crq.jpg"
+                  src="https://p3-passport.byteimg.com/img/mosaic-legacy/3791/5035712059~100x100.awebp"
                   class="comment-author-img"
                 />
               </a>
@@ -126,3 +126,16 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useArticleStore } from '../stores/article';
+
+const props = defineProps({
+  slug: String,
+});
+const articleStore = useArticleStore()
+if(props.slug){
+  console.log(props.slug)
+  articleStore.getCurrentArticle(props.slug)
+}
+</script>
