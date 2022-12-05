@@ -19,17 +19,21 @@
             </router-link>
           </li>
         </template>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/login">Sign in</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/register">Sign up</router-link>
-        </li>
+        <template v-else>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/login">Sign in</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/register">Sign up</router-link>
+          </li>
+        </template>
         <li class="nav-item avatar" v-if="userStore.isLogin">
           <router-link class="nav-link" to=""
-            ><img :src="userStore.user?.image" class="user-pic" alt="user-img" />&nbsp;{{
-              userStore.user?.username
-            }}</router-link
+            ><img
+              :src="userStore.user?.image"
+              class="user-pic"
+              alt="user-img"
+            />&nbsp;{{ userStore.user?.username }}</router-link
           >
           <div class="menu">
             <ul>
@@ -43,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "../../stores/user";
+import { useUserStore } from "../../stores/user"
 const userStore = useUserStore()
 </script>
 
@@ -58,7 +62,7 @@ const userStore = useUserStore()
   padding: 0;
 }
 
-.menu ul li{
+.menu ul li {
   cursor: pointer;
 }
 
