@@ -32,7 +32,7 @@ export const useArticleStore = defineStore<
   actions: {
     async getCurrentArticle(slug: string) {
       const getArticleRes = await getArticle(slug)
-      this.article = getArticleRes
+      this.article = getArticleRes.article
     },
   },
 })

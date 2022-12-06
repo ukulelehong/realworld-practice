@@ -2,22 +2,22 @@
   <div class="article-page">
     <div class="banner">
       <div class="container">
-        <h1>How to build webapps that scale</h1>
+        <h1>{{articleStore.article.title}}</h1>
 
         <div class="article-meta">
-          <router-link to=""><img :src="articleStore.article.author.username" /></router-link>
+          <router-link to=""><img :src="articleStore.article.author.image" /></router-link>
           <div class="info">
-            <a href="" class="author">Eric Simons</a>
-            <span class="date">January 20th</span>
+            <router-link to="" class="author">{{articleStore.article.author.username}}</router-link>
+            <span class="date">{{articleStore.article.createdAt}}</span>
           </div>
           <button class="btn btn-sm btn-outline-secondary">
             <i class="ion-plus-round"></i>
-            &nbsp; Follow Eric Simons <span class="counter">(10)</span>
+            &nbsp; Follow {{articleStore.article.author.username}}
           </button>
           &nbsp;&nbsp;
           <button class="btn btn-sm btn-outline-primary">
             <i class="ion-heart"></i>
-            &nbsp; Favorite Post <span class="counter">(29)</span>
+            &nbsp; Favorite Post <span class="counter">({{articleStore.article.favoritesCount}})</span>
           </button>
         </div>
       </div>

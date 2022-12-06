@@ -18,6 +18,10 @@ export type ListArticlesRes = {
 
 export type ListArticles = Article[]
 
+export type ArticleRes = {
+  article: Article;
+}
+
 export type Article = {
   author: Author;
   body: string;
@@ -41,7 +45,7 @@ export function listArticles(params: ListArticlesParams = {}) {
 
 //获取文章详情
 export function getArticle(slug: string) {
-  return instance.get<Article>(`/articles/${slug}`);
+  return instance.get<ArticleRes>(`/articles/${slug}`);
 }
 
 
